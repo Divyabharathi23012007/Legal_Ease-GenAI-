@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LegalEase - AI-Powered Legal Document Demystifier</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-balance-scale"></i>
+                <h1>LegalEase</h1>
+            </div>
+            <p class="tagline">Demystifying Legal Documents with AI</p>
+            
+            <div class="ai-config-panel" id="aiConfigPanel">
+                <button class="config-toggle" id="configToggle">
+                    <i class="fas fa-cog"></i> AI Settings
+                </button>
+                <div class="config-content" id="configContent" style="display: none;">
+                    <div class="config-option">
+                        <label>
+                            <input type="checkbox" id="useRealAI"> Use Real AI (OpenAI GPT)
+                        </label>
+                    </div>
+                    <div class="config-option" id="apiKeySection" style="display: none;">
+                        <label for="apiKey">OpenAI API Key:</label>
+                        <input type="password" id="apiKey" placeholder="sk-..." />
+                        <small>Your API key is stored locally and never sent to our servers</small>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-content">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <h3>Upload Your Legal Document</h3>
+                        <p>Drag and drop your document here or click to browse</p>
+                        <p class="file-types">Supports: PDF, DOC, DOCX, TXT</p>
+                        <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt" hidden>
+                        <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                            <i class="fas fa-folder-open"></i> Choose File
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="text-input-section">
+                    <h3>Or Paste Your Legal Text</h3>
+                    <textarea id="textInput" placeholder="Paste your legal document text here..." rows="6"></textarea>
+                    <button class="analyze-btn" id="analyzeTextBtn">
+                        <i class="fas fa-search"></i> Analyze Text
+                    </button>
+                </div>
+            </div>
+
+            <div class="analysis-section" id="analysisSection" style="display: none;">
+                <div class="loading" id="loadingIndicator">
+                    <div class="spinner"></div>
+                    <p>Analyzing your document with AI...</p>
+                    
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                    </div>
+                    
+                    <div class="progress-steps">
+                        <div class="progress-step" id="step1">
+                            <i class="fas fa-file-text"></i> Processing Document
+                        </div>
+                        <div class="progress-step" id="step2">
+                            <i class="fas fa-search"></i> Analyzing Content
+                        </div>
+                        <div class="progress-step" id="step3">
+                            <i class="fas fa-brain"></i> AI Processing
+                        </div>
+                        <div class="progress-step" id="step4">
+                            <i class="fas fa-check"></i> Generating Results
+                        </div>
+                    </div>
+                </div>
+
+                <div class="results" id="results" style="display: none;">
+                    <div class="document-info" id="documentInfo">
+                        <!-- Document type and confidence will be inserted here -->
+                    </div>
+                    
+                    <div class="result-tabs">
+                        <button class="tab-btn active" data-tab="summary">
+                            <i class="fas fa-file-alt"></i> Summary
+                        </button>
+                        <button class="tab-btn" data-tab="simplified">
+                            <i class="fas fa-language"></i> Simplified
+                        </button>
+                        <button class="tab-btn" data-tab="keypoints">
+                            <i class="fas fa-list-ul"></i> Key Points
+                        </button>
+                        <button class="tab-btn" data-tab="risks">
+                            <i class="fas fa-exclamation-triangle"></i> Risks & Obligations
+                        </button>
+                        <button class="tab-btn" data-tab="chatbot">
+                            <i class="fas fa-comments"></i> Ask Questions
+                        </button>
+                        <button class="tab-btn" data-tab="riskdashboard">
+                            <i class="fas fa-tachometer-alt"></i> Risk Dashboard
+                        </button>
+                    </div>
+
+                    <div class="tab-content">
+                        <div class="tab-panel active" id="summary">
+                            <h3><i class="fas fa-file-alt"></i> Document Summary</h3>
+                            <div class="content-box" id="summaryContent">
+                                <!-- Summary content will be inserted here -->
+                            </div>
+                        </div>
+
+                        <div class="tab-panel" id="simplified">
+                            <h3><i class="fas fa-language"></i> Simplified Language</h3>
+                            <div class="content-box" id="simplifiedContent">
+                                <!-- Simplified content will be inserted here -->
+                            </div>
+                        </div>
+
+                        <div class="tab-panel" id="keypoints">
+                            <h3><i class="fas fa-list-ul"></i> Key Points</h3>
+                            <div class="content-box" id="keypointsContent">
+                                <!-- Key points will be inserted here -->
+                            </div>
+                        </div>
+
+                        <div class="tab-panel" id="risks">
+                            <h3><i class="fas fa-exclamation-triangle"></i> Risks & Obligations</h3>
+                            <div class="content-box" id="risksContent">
+                                <!-- Risks content will be inserted here -->
+                            </div>
+                        </div>
+
+                        <div class="tab-panel" id="chatbot">
+                            <h3><i class="fas fa-comments"></i> Ask Questions About Your Document</h3>
+                            <div class="chatbot-container">
+                                <div class="chat-messages" id="chatMessages">
+                                    <div class="chat-message bot-message">
+                                        <div class="message-avatar">
+                                            <i class="fas fa-robot"></i>
+                                        </div>
+                                        <div class="message-content">
+                                            <p>Hi! I'm your legal document assistant. Ask me anything about your document:</p>
+                                            <div class="suggested-questions">
+                                                <button class="suggestion-btn" data-question="What are my main obligations in this document?">What are my main obligations?</button>
+                                                <button class="suggestion-btn" data-question="How can I terminate this agreement?">How can I terminate this agreement?</button>
+                                                <button class="suggestion-btn" data-question="What are the payment terms?">What are the payment terms?</button>
+                                                <button class="suggestion-btn" data-question="What happens if I breach this contract?">What if I breach this contract?</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="chat-input-container">
+                                    <div class="chat-input-wrapper">
+                                        <input type="text" id="chatInput" placeholder="Ask a question about your document..." maxlength="500">
+                                        <button id="sendChatBtn" class="send-btn">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
+                                    </div>
+                                    <div class="chat-status" id="chatStatus"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-panel" id="riskdashboard">
+                            <h3><i class="fas fa-tachometer-alt"></i> Risk Assessment Dashboard</h3>
+                            
+                            <!-- Overall Risk Score -->
+                            <div class="risk-overview">
+                                <div class="risk-meter-container">
+                                    <div class="risk-meter">
+                                        <div class="risk-meter-inner">
+                                            <div class="risk-needle" id="riskNeedle"></div>
+                                            <div class="risk-score" id="overallRiskScore">0</div>
+                                            <div class="risk-label">Overall Risk</div>
+                                        </div>
+                                    </div>
+                                    <div class="risk-legend">
+                                        <div class="legend-item low"><span class="legend-color"></span>Low Risk (0-30)</div>
+                                        <div class="legend-item medium"><span class="legend-color"></span>Medium Risk (31-70)</div>
+                                        <div class="legend-item high"><span class="legend-color"></span>High Risk (71-100)</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Risk Categories -->
+                            <div class="risk-categories">
+                                <h4><i class="fas fa-chart-bar"></i> Risk Breakdown by Category</h4>
+                                <div class="risk-category-grid">
+                                    <div class="risk-category-card" data-category="financial">
+                                        <div class="category-header">
+                                            <i class="fas fa-dollar-sign"></i>
+                                            <h5>Financial Risk</h5>
+                                            <span class="category-score" id="financialScore">0</span>
+                                        </div>
+                                        <div class="category-bar">
+                                            <div class="category-progress" id="financialProgress"></div>
+                                        </div>
+                                        <div class="category-details" id="financialDetails">
+                                            <p>Analyzing financial obligations...</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="risk-category-card" data-category="legal">
+                                        <div class="category-header">
+                                            <i class="fas fa-gavel"></i>
+                                            <h5>Legal Risk</h5>
+                                            <span class="category-score" id="legalScore">0</span>
+                                        </div>
+                                        <div class="category-bar">
+                                            <div class="category-progress" id="legalProgress"></div>
+                                        </div>
+                                        <div class="category-details" id="legalDetails">
+                                            <p>Analyzing legal obligations...</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="risk-category-card" data-category="operational">
+                                        <div class="category-header">
+                                            <i class="fas fa-cogs"></i>
+                                            <h5>Operational Risk</h5>
+                                            <span class="category-score" id="operationalScore">0</span>
+                                        </div>
+                                        <div class="category-bar">
+                                            <div class="category-progress" id="operationalProgress"></div>
+                                        </div>
+                                        <div class="category-details" id="operationalDetails">
+                                            <p>Analyzing operational requirements...</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="risk-category-card" data-category="termination">
+                                        <div class="category-header">
+                                            <i class="fas fa-times-circle"></i>
+                                            <h5>Termination Risk</h5>
+                                            <span class="category-score" id="terminationScore">0</span>
+                                        </div>
+                                        <div class="category-bar">
+                                            <div class="category-progress" id="terminationProgress"></div>
+                                        </div>
+                                        <div class="category-details" id="terminationDetails">
+                                            <p>Analyzing termination conditions...</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Personalized Recommendations -->
+                            <div class="recommendations-section">
+                                <h4><i class="fas fa-lightbulb"></i> Personalized Recommendations</h4>
+                                <div class="recommendations-grid" id="recommendationsGrid">
+                                    <!-- Recommendations will be populated here -->
+                                </div>
+                            </div>
+
+                            <!-- Risk Factors -->
+                            <div class="risk-factors-section">
+                                <h4><i class="fas fa-exclamation-triangle"></i> Key Risk Factors</h4>
+                                <div class="risk-factors-list" id="riskFactorsList">
+                                    <!-- Risk factors will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="action-btn" id="downloadBtn">
+                            <i class="fas fa-download"></i> Download Analysis
+                        </button>
+                        <button class="action-btn secondary" id="newAnalysisBtn">
+                            <i class="fas fa-plus"></i> New Analysis
+                        </button>
+                        <button class="action-btn" id="shareBtn">
+                            <i class="fas fa-share-alt"></i> Share Results
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 LegalEase - GenAI Hackathon Project</p>
+            <p class="disclaimer">
+                <i class="fas fa-info-circle"></i>
+                This tool provides AI-generated analysis for informational purposes only. 
+                Always consult with a qualified legal professional for legal advice.
+            </p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js?v=5.0"></script>
+</body>
+</html>

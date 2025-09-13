@@ -1,0 +1,34 @@
+{
+  "name": "legalease-ai-demystifier",
+  "version": "1.0.0",
+  "description": "AI-Powered Legal Document Demystifier for GenAI Hackathon",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8080",
+    "serve": "npx http-server . -p 8080 -o",
+    "dev": "npx live-server --port=8080 --open=/index.html"
+  },
+  "keywords": [
+    "legal",
+    "ai",
+    "document-analysis",
+    "generative-ai",
+    "hackathon",
+    "legal-tech",
+    "document-demystifier"
+  ],
+  "author": "GenAI Hackathon Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/legalease-ai-demystifier.git"
+  },
+  "homepage": "https://your-username.github.io/legalease-ai-demystifier",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
